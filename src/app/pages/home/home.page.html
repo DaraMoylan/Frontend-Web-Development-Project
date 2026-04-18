@@ -1,0 +1,36 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Book Search</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-searchbar
+    [(ngModel)]="searchQuery"
+    (ionInput)="onSearch()"
+    placeholder="Search for books..."
+  ></ion-searchbar>
+
+  @if (loading) {
+    <div class="spinner-container">
+      <ion-spinner></ion-spinner>
+    </div>
+  }
+
+  <ion-list>
+    @for (book of books; track book.key) {
+      <ion-item button (click)="viewBook(book)">
+        @if (book.coverId) {
+          <ion-thumbnail slot="start">
+            <img [src]="bookService.getCoverUrl(book.coverId)" [alt]="book.title" />
+          </ion-thumbnail>
+        }
+        <ion-label>
+          <h2>{{ book.title }}</h2>
+          <p>{{ book.author }}</p>
+          <p>{{ book.firstPublishYear }}</p>
+        </ion-label>
+      </ion-item>
+    }
+  </ion-list>
+</ion-content>
