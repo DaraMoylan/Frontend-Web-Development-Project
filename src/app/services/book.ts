@@ -22,7 +22,7 @@ export class BookService {
   
   searchBooks(query: string): Observable<Book[]> { 
     return this.http
-      .get<any>('${this.apiUrl}?q=${encodeURIComponent(query)}&limit=20')
+      .get<any>(`${this.apiUrl}?q=${encodeURIComponent(query)}&limit=20`)
       .pipe(
         map((response) => 
           response.docs.map((doc: any) => ({
