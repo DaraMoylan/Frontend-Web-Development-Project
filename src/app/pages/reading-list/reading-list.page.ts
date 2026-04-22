@@ -1,20 +1,56 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonContent, IonHeader, IonTitle, IonToolbar } from '@ionic/angular/standalone';
+import { IonContent, IonHeader, IonTitle, IonToolbar, 
+  IonList, 
+  IonItem,
+  IonLabel,
+  IonThumbnail,
+  IonItemSliding,
+  IonItemOptions,
+  IonItemOption,
+
+ } from '@ionic/angular/standalone';
+
+ import { StorageService } from '../../services/storage';
+ import { BookService, Book } from '../../services/book';
+ import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-reading-list',
   templateUrl: './reading-list.page.html',
   styleUrls: ['./reading-list.page.scss'],
   standalone: true,
-  imports: [IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule]
+  imports: [IonContent, IonHeader, IonTitle, IonToolbar,IonList, 
+  IonItem,
+  IonLabel,
+  IonThumbnail,
+  IonItemSliding,
+  IonItemOptions,
+  IonItemOption, CommonModule, FormsModule]
 })
-export class ReadingListPage implements OnInit {
+export class ReadingListPage {
 
-  constructor() { }
+  books: Book[] = [];
 
-  ngOnInit() {
+
+  constructor(
+    private storageService: StorageService,
+    public bookService: BookService, 
+    private router: Router
+  ) { }
+
+  async ionViewWillEnter() { 
+    this.books = await this.storageService.getReadingList();
   }
 
+  viewBook(book: Book) { 
+    const id = book.key.replace('/works/', '');
+    this.router.navigate(['/book-detail', id]);
+  }
+
+  async removeBook(bookKey: string) { 
+    await this.storageService.removeBook(bookKey);
+    this.books = await this.storageService.getReadingList();
+  }
 }

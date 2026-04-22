@@ -1,7 +1,7 @@
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-back-button defaultHref="/home"></ion-back-button>
+      <ion-back-button defaultHref="/tabs/home"></ion-back-button>
     </ion-buttons>
     <ion-title>Book Details</ion-title>
   </ion-toolbar>
@@ -44,6 +44,10 @@
           slot="start"
         ></ion-icon>
         {{ isSaved ? 'Remove from Reading List' : 'Add to Reading List' }}
+      </ion-button>
+      <ion-button expand="block" color="medium" (click)="shareBook()">
+        <ion-icon name="share-social-outline" slot="start"></ion-icon>
+        Share this Book
       </ion-button>
     </div>
   }

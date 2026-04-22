@@ -9,10 +9,11 @@ import { IonContent, IonHeader, IonTitle, IonToolbar,
   IonIcon,
  } from '@ionic/angular/standalone';
  import { addIcons } from 'ionicons';
- import { addCircleOutline, removeCircleOutline } from 'ionicons/icons';
+ import { addCircleOutline, removeCircleOutline, shareSocialOutline } from 'ionicons/icons';
  import { BookService, Book } from '../../services/book';
  import { StorageService } from '../../services/storage';
  import { ActivatedRoute } from '@angular/router';
+ import { Share } from '@capacitor/share';
 
 @Component({
   selector: 'app-book-detail',
@@ -32,7 +33,7 @@ export class BookDetailPage implements OnInit {
     public bookService: BookService, 
     private storageService: StorageService
   ) { 
-    addIcons({ addCircleOutline, removeCircleOutline });
+    addIcons({ addCircleOutline, removeCircleOutline, shareSocialOutline });
   }
 
   ngOnInit() {
@@ -63,5 +64,15 @@ export class BookDetailPage implements OnInit {
       await this.storageService.addBook(this.book);
     }
     this.isSaved = !this.isSaved;
+  }
+
+  async shareBook() { 
+    if(!this.book) return;
+
+    await Share.share({
+      title: this.book.title, 
+      text: `Check out "${this.book.title}" by ${this.book.author}`,
+      url: `https://openlibrary.org${this.book.key}`
+    });
   }
 }
