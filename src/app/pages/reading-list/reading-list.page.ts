@@ -11,6 +11,8 @@ import { IonContent, IonHeader, IonTitle, IonToolbar,
   IonItemOption,
   IonSelect,
   IonSelectOption,
+  IonSegment,
+  IonSegmentButton
 
  } from '@ionic/angular/standalone';
 
@@ -31,11 +33,16 @@ import { IonContent, IonHeader, IonTitle, IonToolbar,
   IonItemOptions,
   IonItemOption, 
   IonSelect,
-  IonSelectOption, CommonModule, FormsModule]
+  IonSelectOption,
+  IonSegment,
+  IonSegmentButton,
+  CommonModule, FormsModule]
 })
 export class ReadingListPage {
 
-  books: Book[] = [];
+  allBooks: Book[] = [];
+  filteredBooks: Book[] = [];
+  activeFilter = 'all';
 
 
   constructor(
@@ -45,8 +52,30 @@ export class ReadingListPage {
   ) { }
 
   async ionViewWillEnter() { 
-    this.books = await this.storageService.getReadingList();
+    this.allBooks = await this.storageService.getReadingList();
+    this.applyFilter();
   }
+
+  applyFilter() { 
+    if(this.activeFilter == 'all')  {
+      this.filteredBooks = this.allBooks;
+    }
+    else { 
+      this.filteredBooks = [];
+
+      for(let i = 0; i < this.allBooks.length; i++) { 
+        if(this.allBooks[i].status === this.activeFilter) { 
+          this.filteredBooks.push(this.allBooks[i]);
+        }
+      }
+    }
+  }
+
+  onFilterChange(event: any) { 
+    this.activeFilter = event.detail.value;
+    this.applyFilter();
+  }
+
 
   viewBook(book: Book) { 
     const id = book.key.replace('/works/', '');
@@ -55,12 +84,14 @@ export class ReadingListPage {
 
   async removeBook(bookKey: string) { 
     await this.storageService.removeBook(bookKey);
-    this.books = await this.storageService.getReadingList();
+    this.allBooks = await this.storageService.getReadingList();
+    this.applyFilter();
   }
 
   async updateStatus(book: Book) { 
     if(book.status)  { 
       await this.storageService.updateBookStatus(book.key, book.status);
+      this.applyFilter();
     }
   }
 }

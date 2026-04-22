@@ -2,17 +2,33 @@
   <ion-toolbar>
     <ion-title>Reading List</ion-title>
   </ion-toolbar>
+  <ion-toolbar>
+    <ion-segment value="all" (ionChange)="onFilterChange($event)">
+      <ion-segment-button value="all">
+        <ion-label>All</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="to-read">
+        <ion-label>To Read</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="reading">
+        <ion-label>Reading</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="finished">
+        <ion-label>Finished</ion-label>
+      </ion-segment-button>
+    </ion-segment>
+  </ion-toolbar>
 </ion-header>
 
 <ion-content>
-  @if (books.length === 0) {
+  @if (filteredBooks.length === 0) {
     <div class="empty-state">
-      <p>No books saved yet. Search for books and add them to your list!</p>
+      <p>No books here yet.</p>
     </div>
   }
 
   <ion-list>
-    @for (book of books; track book.key) {
+    @for (book of filteredBooks; track book.key) {
       <ion-item-sliding>
         <ion-item button (click)="viewBook(book)">
           @if (book.coverId) {
