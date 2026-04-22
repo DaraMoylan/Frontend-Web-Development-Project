@@ -7,7 +7,7 @@
 <ion-content>
   <ion-searchbar
     [(ngModel)]="searchQuery"
-    (ionInput)="onSearch()"
+    (ionChange)="onSearch()"
     placeholder="Search for books..."
   ></ion-searchbar>
 

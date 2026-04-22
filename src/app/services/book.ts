@@ -8,6 +8,9 @@ export interface Book {
   author: string;
   coverId: number | null;
   firstPublishYear: number | null;
+  description?: string;
+  subjects?: string[];
+  pageCount?: number;
 }
 
 @Injectable({
@@ -36,7 +39,27 @@ export class BookService {
       );
   }
 
+  // function for book details
+  getBookDetails(key: string): Observable<Book> { 
+    return this.http
+      .get<any>(`https://openlibrary.org${key}.json`)
+      .pipe(
+        map((doc) => ({
+          key: key,
+          title: doc.title,
+          author: '',
+          coverId: doc.covers ? doc.covers[0] : null, 
+          firstPublishYear: null, 
+          description: typeof doc.description === 'string'
+           ? doc.description
+           : doc.description?.value || 'No description available.',
+          subjects: doc.subjects ? doc.subjects.slice(0,5) : [],
+          pageCount: doc.number_of_pages || null,
+        }))
+      );
+  }
+
   getCoverUrl(coverId: number, size: string = 'M'): string { 
-    return 'https://covers.openlibrary.org/b/id/${coverId}-${size}.jpg';
+    return `https://covers.openlibrary.org/b/id/${coverId}-${size}.jpg`;
   }
 }

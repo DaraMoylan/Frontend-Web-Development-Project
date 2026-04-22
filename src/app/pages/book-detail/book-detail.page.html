@@ -1,13 +1,50 @@
-<ion-header [translucent]="true">
+<ion-header>
   <ion-toolbar>
-    <ion-title>book-detail</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/home"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Book Details</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">book-detail</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content class="ion-padding">
+  @if (loading) {
+    <div class="spinner-container">
+      <ion-spinner></ion-spinner>
+    </div>
+  }
+
+  @if (book) {
+    <div class="book-detail">
+      @if (book.coverId) {
+        <img
+          [src]="bookService.getCoverUrl(book.coverId, 'L')"
+          [alt]="book.title"
+          class="cover-image"
+        />
+      }
+      <h1>{{ book.title }}</h1>
+      <p class="author">{{ book.author }}</p>
+
+      @if (book.firstPublishYear) {
+        <p>First published: {{ book.firstPublishYear }}</p>
+      }
+
+      @if (book.description) {
+        <p>{{ book.description }}</p>
+      }
+
+      @if (book.subjects && book.subjects.length > 0) {
+        <p>Subjects: {{ book.subjects.join(', ') }}</p>
+      }
+
+      <ion-button expand="block" (click)="toggleSave()">
+        <ion-icon
+          [name]="isSaved ? 'remove-circle-outline' : 'add-circle-outline'"
+          slot="start"
+        ></ion-icon>
+        {{ isSaved ? 'Remove from Reading List' : 'Add to Reading List' }}
+      </ion-button>
+    </div>
+  }
 </ion-content>

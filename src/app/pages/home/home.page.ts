@@ -42,8 +42,9 @@ export class HomePage {
     });
   }
 
-  viewBook(book: Book) { 
-    this.router.navigate(['/book-detail', book.key]);
+  viewBook(book: Book) {
+    const id = book.key.replace('/works/', ''); 
+    this.router.navigate(['/book-detail', id]);
   }
 
 }
