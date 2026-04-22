@@ -24,6 +24,17 @@
             <h2>{{ book.title }}</h2>
             <p>{{ book.author }}</p>
           </ion-label>
+          <ion-select
+            [(ngModel)]="book.status"
+            (ionChange)="updateStatus(book)"
+            (click)="$event.stopPropagation()"
+            slot="end"
+            interface="popover"
+          >
+            <ion-select-option value="to-read">To Read</ion-select-option>
+            <ion-select-option value="reading">Reading</ion-select-option>
+            <ion-select-option value="finished">Finished</ion-select-option>
+          </ion-select>
         </ion-item>
         <ion-item-options side="end">
           <ion-item-option color="danger" (click)="removeBook(book.key)">

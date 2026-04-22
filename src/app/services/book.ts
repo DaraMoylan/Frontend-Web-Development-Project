@@ -11,6 +11,8 @@ export interface Book {
   description?: string;
   subjects?: string[];
   pageCount?: number;
+  // add to read, reading or finished status field
+  status?: string;
 }
 
 @Injectable({

@@ -44,6 +44,8 @@ export class StorageService {
     }
 
     if(!exists) { 
+      // update status
+      book.status = 'to-read';
       books.push(book);
       await this.storage.set('reading-list', books);
     }
@@ -69,5 +71,18 @@ export class StorageService {
       }
     }
     return false;
+  }
+
+  async updateBookStatus(bookKey: string, status: string): Promise<void> { 
+
+    let books = await this.getReadingList();
+
+    for(let i = 0; i < books.length; i++)  {
+      if(books[i].key == bookKey) { 
+        books[i].status = status;
+        break;
+      }
+    }
+    await this.storage.set('reading-list', books);
   }
 }

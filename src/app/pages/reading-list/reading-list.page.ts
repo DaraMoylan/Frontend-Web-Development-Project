@@ -9,6 +9,8 @@ import { IonContent, IonHeader, IonTitle, IonToolbar,
   IonItemSliding,
   IonItemOptions,
   IonItemOption,
+  IonSelect,
+  IonSelectOption,
 
  } from '@ionic/angular/standalone';
 
@@ -27,7 +29,9 @@ import { IonContent, IonHeader, IonTitle, IonToolbar,
   IonThumbnail,
   IonItemSliding,
   IonItemOptions,
-  IonItemOption, CommonModule, FormsModule]
+  IonItemOption, 
+  IonSelect,
+  IonSelectOption, CommonModule, FormsModule]
 })
 export class ReadingListPage {
 
@@ -52,5 +56,11 @@ export class ReadingListPage {
   async removeBook(bookKey: string) { 
     await this.storageService.removeBook(bookKey);
     this.books = await this.storageService.getReadingList();
+  }
+
+  async updateStatus(book: Book) { 
+    if(book.status)  { 
+      await this.storageService.updateBookStatus(book.key, book.status);
+    }
   }
 }
