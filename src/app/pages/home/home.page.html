@@ -1,13 +1,14 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>Book Search</ion-title>
+    <ion-title>Shelf</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
   <ion-searchbar
     [(ngModel)]="searchQuery"
-    (ionChange)="onSearch()"
+    (ionInput)="onSearch()"
+    [debounce]="500"
     placeholder="Search for books..."
   ></ion-searchbar>
 
@@ -17,12 +18,41 @@
     </div>
   }
 
+  @if (!loading && books.length === 0 && searchQuery.length === 0) {
+    <div class="welcome">
+      <img src="assets/icon/favicon.png" alt="Shelf logo" class="welcome-logo" />
+      <h2>Welcome to Shelf</h2>
+      <p>Search for any book to get started. Save books to your reading list and track your progress.</p>
+      @if (totalBooks > 0) { 
+        <div class="stats">
+          <span>{{ totalBooks}} {{ totalBooks === 1 ? 'book' : 'books'}} saved</span>
+          <span>{{ finishedBooks }} finished</span>
+        </div>
+      }
+    </div>
+  }
+
+  @if (!loading && books.length === 0 && searchQuery.length > 0) {
+    <div class="welcome">
+      <p>No results found. Try a different search.</p>
+    </div>
+  }
+
   <ion-list>
     @for (book of books; track book.key) {
       <ion-item button (click)="viewBook(book)">
         @if (book.coverId) {
           <ion-thumbnail slot="start">
-            <img [src]="bookService.getCoverUrl(book.coverId)" [alt]="book.title" />
+            <img
+              [src]="bookService.getCoverUrl(book.coverId)"
+              [alt]="book.title"
+              loading="lazy"
+            />
+          </ion-thumbnail>
+        }
+        @if (!book.coverId) {
+          <ion-thumbnail slot="start">
+            <div class="no-cover">?</div>
           </ion-thumbnail>
         }
         <ion-label>

@@ -5,7 +5,7 @@
   <ion-toolbar>
     <ion-segment value="all" (ionChange)="onFilterChange($event)">
       <ion-segment-button value="all">
-        <ion-label>All</ion-label>
+        <ion-label>All ({{ allBooks.length }})</ion-label>
       </ion-segment-button>
       <ion-segment-button value="to-read">
         <ion-label>To Read</ion-label>

@@ -12,6 +12,7 @@ import { IonContent, IonHeader, IonTitle, IonToolbar,
  } from '@ionic/angular/standalone';
 
  import {BookService, Book} from '../../services/book';
+import { StorageService } from 'src/app/services/storage';
 
 
 @Component({
@@ -30,8 +31,22 @@ export class HomePage {
   searchQuery = '';
   books: Book[] = [];
   loading = false;
+  totalBooks: number = 0;
+  finishedBooks: number = 0;
 
-  constructor(public bookService: BookService, private router: Router) { }
+  constructor(public bookService: BookService, private router: Router, private storageService: StorageService) { }
+
+  async ionViewWillEnter() { 
+    const readingList = await this.storageService.getReadingList();
+    this.totalBooks = readingList.length;
+    this.finishedBooks = 0;
+
+    for(let i = 0; i < readingList.length; i++) { 
+      if(readingList[i].status === 'finished') { 
+        this.finishedBooks++;
+      }
+    }
+  }
 
   onSearch() { 
     if(this.searchQuery.trim().length < 2) return;
