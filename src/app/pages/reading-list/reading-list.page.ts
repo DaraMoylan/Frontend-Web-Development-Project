@@ -57,7 +57,7 @@ export class ReadingListPage {
   }
 
   applyFilter() { 
-    if(this.activeFilter == 'all')  {
+    if(this.activeFilter === 'all')  {
       this.filteredBooks = this.allBooks;
     }
     else { 

@@ -7,12 +7,10 @@ import { Book } from './book';
   providedIn: 'root',
 })
 
-// .key for the string 
-
 export class StorageService {
   private storageReady = false;
 
-  // set up storage on init
+  
   constructor(private storage: Storage) { 
     this.init();
   }
@@ -22,8 +20,7 @@ export class StorageService {
     this.storageReady = true;
   }
 
-  // retrieve the storage
-  // check if ready -> if so return the books or an empty array
+
   async getReadingList(): Promise<Book[]> { 
     if(!this.storageReady) { 
       await this.init();
@@ -44,7 +41,6 @@ export class StorageService {
     }
 
     if(!exists) { 
-      // update status
       book.status = 'to-read';
       books.push(book);
       await this.storage.set('reading-list', books);
@@ -66,7 +62,7 @@ export class StorageService {
     const books = await this.getReadingList();
     
     for(let i = 0; i < books.length; i++) { 
-      if(books[i].key == bookKey) { 
+      if(books[i].key === bookKey) { 
         return true;
       }
     }
@@ -78,7 +74,7 @@ export class StorageService {
     let books = await this.getReadingList();
 
     for(let i = 0; i < books.length; i++)  {
-      if(books[i].key == bookKey) { 
+      if(books[i].key === bookKey) { 
         books[i].status = status;
         break;
       }

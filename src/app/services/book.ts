@@ -11,7 +11,7 @@ export interface Book {
   description?: string;
   subjects?: string[];
   pageCount?: number;
-  // add to read, reading or finished status field
+  
   status?: string;
 }
 
@@ -41,7 +41,7 @@ export class BookService {
       );
   }
 
-  // function for book details
+  
   getBookDetails(key: string): Observable<Book> { 
     return this.http
       .get<any>(`https://openlibrary.org${key}.json`)
